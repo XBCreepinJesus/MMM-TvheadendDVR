@@ -2,6 +2,8 @@
 
 A module for MagicMirror² showing the next scheduled [Tvheadend](https://tvheadend.org) recordings.
 
+Please note: I am not currently using this module on my own mirror - if you find any issues let me know.
+
 >![](/screenshots/demo.png)<br>My next five scheduled recordings (as an example - don't judge!).
 
 ---
