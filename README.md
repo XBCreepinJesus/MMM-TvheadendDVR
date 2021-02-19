@@ -1,4 +1,4 @@
-# MMM-TvheadendDVRStatus
+# MMM-TvheadendDVR
 
 A module for MagicMirror² showing the next scheduled [Tvheadend](https://tvheadend.org) recordings.
 
@@ -10,7 +10,7 @@ A module for MagicMirror² showing the next scheduled [Tvheadend](https://tvhead
 Install using Git into the modules directory of your MagicMirror installation:
 
 ```
-git clone https://github.com/XBCreepinJesus/MMM-TvheadendDVRStatus.git
+git clone https://github.com/XBCreepinJesus/MMM-TvheadendDVR.git
 ```
 
 Then add it to your `config.js` modules section like any other module:
@@ -18,7 +18,7 @@ Then add it to your `config.js` modules section like any other module:
 ```javascript
 modules: [
     {
-        module: "MMM-TvheadendDVRStatus",
+        module: "MMM-TvheadendDVR",
         header: "Upcoming TV recordings",    // for example
         position: "bottom_left",   // can be anywhere you like
         config: {

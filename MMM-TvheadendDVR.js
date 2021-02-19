@@ -1,4 +1,4 @@
-Module.register("MMM-TvheadendDVRStatus", {
+Module.register("MMM-TvheadendDVR", {
 	defaults: {
 		server: null,
 		username: null,
