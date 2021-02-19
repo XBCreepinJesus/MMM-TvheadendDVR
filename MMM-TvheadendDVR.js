@@ -64,7 +64,7 @@ Module.register("MMM-TvheadendDVR", {
 				this.updateDom();
 
 				setTimeout(() => {
-					this.getDvrEntries();
+					this.getRecordings();
 				}, this.config.updateInterval);
 			});
 	},
