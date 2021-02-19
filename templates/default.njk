@@ -1,0 +1,44 @@
+{% if recordings %}
+
+	<table class="xsmall light">
+		{% for r in recordings %}
+			{% if r.enabled %}
+				<tr>
+					<td>
+						<table>
+							<tr>
+								<td class="title">
+									{% if r.sched_status == "recording" %}
+										<span class="fa fas fa-circle recording"></span>
+									{% endif %}
+
+									{{ r.disp_title }}
+								</td>
+							</tr>
+							<tr>
+								<td class="dimmed channel">{{ r.channelname }}</td>
+								<td class="dimmed time">
+									{% if r.sched_status == "recording" %}
+										{{ r.stop | getTime(true) }}
+									{% else %}
+										{{ r.start | getTime }}
+									{% endif %}
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			{% endif %}
+		{% endfor %}
+	</table>
+
+	{% if recordings.length == 0 %}
+		<div class="small light dimmed">No upcoming recordings.</div>
+	{% endif %}
+
+	{# Otherwise, show loading message until loaded #}
+{% else %}
+
+	<div class="xsmall light dim">Loading...</div>
+
+{% endif %}

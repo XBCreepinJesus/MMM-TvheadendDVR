@@ -1,0 +1,17 @@
+.MMM-TVheadendDVRStatus .recording {
+	font-size: 75%;
+	color: #ff6347;
+}
+
+/* .MMM-TvheadendDVRStatus .title {
+	
+} */
+
+.MMM-TVheadendDVRStatus .channel {
+	font-size: 75%;
+}
+
+.MMM-TVheadendDVRStatus .time {
+	font-size: 75%;
+	text-align: right;
+}
