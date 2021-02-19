@@ -27,9 +27,14 @@ Module.register("MMM-TvheadendDVRStatus", {
 	// DVR entry storage
 	recordings: null,
 
-	// Define required scripts.
+	// Load stylesheets
 	getStyles: function () {
 		return ["font-awesome.css", this.file("templates/" + this.config.templateName + ".css")];
+	},
+
+	// Load scripts
+	getScripts: function () {
+		return ["moment.js"];
 	},
 
 	start: function () {
