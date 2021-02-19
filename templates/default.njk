@@ -1,13 +1,13 @@
 {% if recordings %}
 
-	<table class="xsmall light">
+	<table class="small light">
 		{% for r in recordings %}
 			{% if r.enabled %}
 				<tr>
 					<td>
 						<table>
 							<tr>
-								<td class="title">
+								<td class="title bright">
 									{% if r.sched_status == "recording" %}
 										<span class="fa fas fa-circle recording"></span>
 									{% endif %}
@@ -16,8 +16,8 @@
 								</td>
 							</tr>
 							<tr>
-								<td class="dimmed channel">{{ r.channelname }}</td>
-								<td class="dimmed time">
+								<td class="channel">{{ r.channelname }}</td>
+								<td class="time">
 									{% if r.sched_status == "recording" %}
 										{{ r.stop | getTime(true) }}
 									{% else %}
