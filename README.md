@@ -2,17 +2,17 @@
 
 A module for MagicMirror² showing the next scheduled [Tvheadend](https://tvheadend.org) recordings.
 
-Please note: I am not currently using this module on my own mirror - if you find any issues let me know.
-
 >![](/screenshots/demo.png)<br>My next five scheduled recordings (as an example - don't judge!).
 
 ---
 ## Installation
 
-Install using Git into the modules directory of your MagicMirror installation:
+Install the module and required `digest-fetch` node.js module using Git into the modules directory of your MagicMirror installation:
 
 ```
 git clone https://github.com/XBCreepinJesus/MMM-TvheadendDVR.git
+cd MMM-TvheadendDVR/
+npm install
 ```
 
 Then add it to your `config.js` modules section like any other module:
@@ -48,9 +48,10 @@ The required options are:
 The following configurations are all optional:
 |Option|Default|Description|
 |---|---|---|
-|`updateInterval`|`5*60*1000`||
-|`maxRecordings`|`5`||
-|`templateName`|`default`||
+|`basicAuth`|`false`|Set to `true` if you need to use basic (plain text) authentication ([see below](#tvheadend-configuration)).|
+|`updateInterval`|`5*60*1000`|Time between updates (in milliseconds, so `5*60*1000` means 5 minutes).|
+|`maxRecordings`|`5`|Maximum number of recordings to show.|
+|`templateName`|`default`|The name of your custom template; e.g., for `custom.njk`, just use `custom`).|
 |`timeFormats`||See below.|
 
 <br>
@@ -62,7 +63,7 @@ timeFormats {
 	today: "[Today at] LT",        // For recordings happening the same day
 	tomorrow: "[Tomorrow at] LT",  // For recordings happening the next day
 	thisWeek: "dddd [at] LT",      // For recordings happening within the next week
-	nextWeekOn: "dddd DD [at] LT"  // For all other dates
+	nextWeekOn: "MMM DD [at] LT"   // For all other dates
 }
 ```
 
@@ -91,4 +92,8 @@ This module will need to use an account that has access to the web interface and
 
 ![](/screenshots/tvh_user.png)
 
-You will also need to configure 'HTTP CORS Origin' under Configuration > General > Base. This needs to be either `*` to allow requests from any origin, or the full path to your MagicMirror instance (e.g., `http://magicmirror.local:8080`).
+You may also need to configure the Authentication Type under (in v4.3) Configuration > General > Base > HTTP Server Settings. Be sure to set the module to use the same type - if not set to Basic/Plain then MD5 Digest authentication will be used (default in Tvheadend 4.3+; previous versions use plain/basic).
+
+To test authentication/permissions before loading the module, you can open the API page in a browser or use `curl`:
+- For basic authentication: `curl -u [username]:[password] http://[server]/api/dvr/entry/grid_upcoming`
+- For digest authentication: `curl -u [username]:[password] --digest http://[server]/api/dvr/entry/grid_upcoming`
