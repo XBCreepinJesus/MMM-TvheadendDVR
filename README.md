@@ -1,7 +1,5 @@
 # MMM-TvheadendDVR
 
->NOTE: apparently, the newer builds (4.3+) of Tvheadend use Digest authentication - this module only uses Basic at the moment, so will only work with Tvheadend 4.2.x or lower (which I have on my Pi, hence why everything looked alright!). I'll see if I can get it working with 4.3...
-
 A module for MagicMirror² showing the next scheduled [Tvheadend](https://tvheadend.org) recordings.
 
 >![](/screenshots/demo.png)<br>My next five scheduled recordings (as an example - don't judge!).
