@@ -24,7 +24,6 @@ module.exports = NodeHelper.create({
 					.sort((a, b) => a.start - b.start);
 
 				this.sendSocketNotification("MMM-TVHEADENDDVR_RECORDINGS", recordings);
-				console.log("Recordings sent to module");
 			})
 			.catch(error => {
 				console.log(error);
