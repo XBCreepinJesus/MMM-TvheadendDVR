@@ -8,11 +8,11 @@ module.exports = NodeHelper.create({
 
 	socketNotificationReceived: function (notification, data) {
 		if (notification === "MMM-TVHEADENDDVR_GET_RECORDINGS") {
-			this.getRecordings(data.url, data.username, data.password, data.basicAuth, data.updateInterval);
+			this.getRecordings(data.url, data.username, data.password, data.basicAuth);
 		}
 	},
 
-	getRecordings(url, username, password, basicAuth, updateInterval) {
+	getRecordings(url, username, password, basicAuth) {
 		let recordings = {};
 		const tvhServer = new fetch(username, password, { algorithm: "MD5", basic: basicAuth });
 
@@ -27,11 +27,6 @@ module.exports = NodeHelper.create({
 			})
 			.catch(error => {
 				console.log(error);
-			})
-			.finally(() => {
-				setTimeout(() => {
-					this.getRecordings(url, username, password, basicAuth, updateInterval);
-				}, updateInterval);
 			});
 	},
 });

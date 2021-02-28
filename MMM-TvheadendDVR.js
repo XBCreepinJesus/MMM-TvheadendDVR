@@ -41,25 +41,36 @@ Module.register("MMM-TvheadendDVR", {
 		// Add template filters
 		this.addFilters();
 
-		// Ask for list of DVR entries after loadDelay
+		// Schedule first update (after loadDelay)
 		setTimeout(() => {
-			this.sendSocketNotification("MMM-TVHEADENDDVR_GET_RECORDINGS",
-				{
-					url: this.getUrl(),
-					username: this.config.username,
-					password: this.config.password,
-					basicAuth: this.config.basicAuth,
-					updateInterval: this.config.updateInterval
-				}
-			);
+			this.getRecordings();
 		}, this.config.loadDelay);
+	},
+
+	getRecordings() {
+		// Send notification and config to node helper
+		this.sendSocketNotification("MMM-TVHEADENDDVR_GET_RECORDINGS",
+			{
+				url: this.getUrl(),
+				username: this.config.username,
+				password: this.config.password,
+				basicAuth: this.config.basicAuth,
+			}
+		);
 	},
 
 	socketNotificationReceived: function (notification, data) {
 		// Update display on receiving list of recordings
 		if (notification === "MMM-TVHEADENDDVR_RECORDINGS") {
 			this.recordings = data;
+
+			// Refresh module display
 			this.updateDom();
+
+			// Schedule next update
+			setTimeout(() => {
+				this.getRecordings();
+			}, this.config.updateInterval);
 		};
 	},
 
