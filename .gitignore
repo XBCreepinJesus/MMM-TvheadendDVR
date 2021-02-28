@@ -2,3 +2,6 @@
 /templates/**
 !/templates/default.css
 !/templates/default.njk
+
+#node modules folder
+/node_modules

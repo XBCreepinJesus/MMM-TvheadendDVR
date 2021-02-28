@@ -3,9 +3,15 @@ Module.register("MMM-TvheadendDVR", {
 		server: null,
 		username: null,
 		password: null,
+		basicAuth: false,
+
+		// Update interval
+		updateInterval: 5 * 60 * 1000, // 5 minutes
+		loadDelay: 0,
 
 		templateName: "default",
 
+		// Use in templates to limit size of list
 		maxRecordings: 5,
 
 		// Time formats used by Moment.js
@@ -14,14 +20,8 @@ Module.register("MMM-TvheadendDVR", {
 			today: "[Today at] LT",
 			tomorrow: "[Tomorrow at] LT",
 			thisWeek: "dddd [at] LT",
-			nextWeekOn: "dddd DD [at] LT"
+			nextWeekOn: "MMM DD [at] LT"
 		},
-
-		// Update interval
-		updateInterval: 5 * 60 * 1000, // 5 minutes
-
-		// Log certain things (for testing/curiosity)
-		logData: false
 	},
 
 	// DVR entry storage
@@ -41,41 +41,26 @@ Module.register("MMM-TvheadendDVR", {
 		// Add template filters
 		this.addFilters();
 
-		// Trigger DVR Entries update
-		this.getRecordings();
+		// Ask for list of DVR entries after loadDelay
+		setTimeout(() => {
+			this.sendSocketNotification("MMM-TVHEADENDDVR_GET_RECORDINGS",
+				{
+					url: this.getUrl(),
+					username: this.config.username,
+					password: this.config.password,
+					basicAuth: this.config.basicAuth,
+					updateInterval: this.config.updateInterval
+				}
+			);
+		}, this.config.loadDelay);
 	},
 
-	getRecordings() {
-		this.getData()
-			.then(data => {
-				this.recordings = data.entries
-					// Sort based on start time
-					.sort((a, b) => a.start - b.start)
-
-					// Cut down to maximum number of entries as stated in config
-					.slice(0, Math.min(data.entries.length, this.config.maxRecordings));
-
-				if (this.config.logData) Log.info(this.recordings);
-			})
-			.catch(error => {
-				Log.error(error);
-			})
-			.finally(() => {
-				this.updateDom();
-
-				setTimeout(() => {
-					this.getRecordings();
-				}, this.config.updateInterval);
-			});
-	},
-
-	async getData() {
-		const response = await fetch(this.getUrl(), { headers: this.getHeaders() });
-
-		if (response.ok) return response.json();
-		else {
-			Log.error("Error: ", response.status, response.statusText);
-		}
+	socketNotificationReceived: function (notification, data) {
+		// Update display on receiving list of recordings
+		if (notification === "MMM-TVHEADENDDVR_RECORDINGS") {
+			this.recordings = data;
+			this.updateDom();
+		};
 	},
 
 	getUrl() {
@@ -88,15 +73,6 @@ Module.register("MMM-TvheadendDVR", {
 		return url;
 	},
 
-	getHeaders() {
-		let headers = {
-			accept: "application/json",
-			Authorization: "Basic " + btoa(this.config.username + ":" + this.config.password)
-		};
-
-		return headers;
-	},
-
 	getTemplate: function () {
 		return `templates/${this.config.templateName}.njk`;
 	},
@@ -104,7 +80,7 @@ Module.register("MMM-TvheadendDVR", {
 	getTemplateData: function () {
 		return {
 			config: this.config,
-			recordings: this.recordings
+			recordings: this.recordings.slice(0, Math.min(this.recordings.length, this.config.maxRecordings))
 		};
 	},
 
