@@ -57,6 +57,11 @@ Module.register("MMM-TvheadendDVR", {
 				basicAuth: this.config.basicAuth,
 			}
 		);
+
+		// Schedule next update
+		setTimeout(() => {
+			this.getRecordings();
+		}, this.config.updateInterval);
 	},
 
 	socketNotificationReceived: function (notification, data) {
@@ -66,11 +71,6 @@ Module.register("MMM-TvheadendDVR", {
 
 			// Refresh module display
 			this.updateDom();
-
-			// Schedule next update
-			setTimeout(() => {
-				this.getRecordings();
-			}, this.config.updateInterval);
 		};
 	},
 
