@@ -16,7 +16,7 @@ module.exports = NodeHelper.create({
 		let recordings = {};
 		const tvhServer = new fetch(username, password, { algorithm: "MD5", basic: basicAuth });
 
-		tvhServer.fetch(url, { accept: "application/json" }
+		tvhServer.fetch(url, { accept: "application/json" })
 			.then(data => data.json())
 			.then(data => {
 				recordings = data.entries
