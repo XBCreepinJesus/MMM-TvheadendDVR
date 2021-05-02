@@ -27,6 +27,9 @@ Module.register("MMM-TvheadendDVR", {
 	// DVR entry storage
 	recordings: null,
 
+	// Update timer
+	updateTimer: null,
+
 	// Load stylesheets
 	getStyles: function () {
 		return ["font-awesome.css", this.file("templates/" + this.config.templateName + ".css")];
@@ -49,7 +52,7 @@ Module.register("MMM-TvheadendDVR", {
 
 	getRecordings() {
 		// Send notification and config to node helper
-		this.sendSocketNotification("MMM-TVHEADENDDVR_GET_RECORDINGS",
+		this.sendSocketNotification("GET RECORDINGS",
 			{
 				url: this.getUrl(),
 				username: this.config.username,
@@ -59,14 +62,14 @@ Module.register("MMM-TvheadendDVR", {
 		);
 
 		// Schedule next update
-		setTimeout(() => {
+		this.updateTimer = setTimeout(() => {
 			this.getRecordings();
 		}, this.config.updateInterval);
 	},
 
 	socketNotificationReceived: function (notification, data) {
 		// Update display on receiving list of recordings
-		if (notification === "MMM-TVHEADENDDVR_RECORDINGS") {
+		if (notification === "GOT RECORDINGS") {
 			this.recordings = data;
 
 			// Refresh module display
@@ -76,16 +79,21 @@ Module.register("MMM-TvheadendDVR", {
 
 	notificationReceived: function (notification) {
 		// Fore an update when this notification is received
-		if (notification === "MMM-TvheadendDVR_FORCE_UPDATE")
+		if (notification === "MMM-TvheadendDVR FORCE UPDATE") {
+			// Reset update interval
+			clearTimeout(this.updateTimer);
+
 			this.getRecordings();
+		}
 	},
 
 	getUrl() {
-		let url = "http://" +
-			this.config.server +
+		let url =
+			// Check if server path includes http(s)://; if not, add it (assume http).
+			(String(this.config.server).match("^https?://") ? this.config.server : "http://" + this.config.server)
 
 			// Use 'grid_upcoming' to exclude past/completed recordings
-			"/api/dvr/entry/grid_upcoming";
+			+ "/api/dvr/entry/grid_upcoming";
 
 		return url;
 	},
@@ -97,7 +105,7 @@ Module.register("MMM-TvheadendDVR", {
 	getTemplateData: function () {
 		return {
 			config: this.config,
-			recordings: this.recordings.slice(0, Math.min(this.recordings.length, this.config.maxRecordings))
+			recordings: this.recordings ? this.recordings.slice(0, Math.min(this.recordings.length, this.config.maxRecordings)) : null
 		};
 	},
 

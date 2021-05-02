@@ -7,7 +7,7 @@ module.exports = NodeHelper.create({
 	},
 
 	socketNotificationReceived: function (notification, data) {
-		if (notification === "MMM-TVHEADENDDVR_GET_RECORDINGS") {
+		if (notification === "GET RECORDINGS") {
 			this.getRecordings(data.url, data.username, data.password, data.basicAuth);
 		}
 	},
@@ -23,7 +23,7 @@ module.exports = NodeHelper.create({
 					// Sort based on start time
 					.sort((a, b) => a.start - b.start);
 
-				this.sendSocketNotification("MMM-TVHEADENDDVR_RECORDINGS", recordings);
+				this.sendSocketNotification("GOT RECORDINGS", recordings);
 			})
 			.catch(error => {
 				console.log(error);
