@@ -74,6 +74,12 @@ Module.register("MMM-TvheadendDVR", {
 		};
 	},
 
+	notificationReceived: function (notification) {
+		// Fore an update when this notification is received
+		if (notification === "MMM-TvheadendDVR_FORCE_UPDATE")
+			this.getRecordings();
+	},
+
 	getUrl() {
 		let url = "http://" +
 			this.config.server +
